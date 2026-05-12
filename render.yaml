@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: appointment-booking
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: BUSINESS_NAME
+        sync: false
+      - key: BUSINESS_EMAIL
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: SERVICES
+        sync: false
+      - key: SLOT_START
+        sync: false
+      - key: SLOT_END
+        sync: false
+      - key: SLOT_INTERVAL
+        sync: false
