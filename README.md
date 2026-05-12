@@ -2,7 +2,8 @@
 
 A bilingual (Arabic/English) appointment booking web app built with Python and Flask. Clients fill out a form and instantly receive a confirmation email — the business owner gets notified at the same time. Fully configurable for any service business.
 
-![App Screenshot](screenshot.png)
+![App Scr<img width="1103" height="999" alt="Screenshot 2026-05-12 at 6 59 06 PM" src="https://github.com/user-attachments/assets/e5adcb68-3cc9-4d93-a02c-995eb2d13ce1" />
+eenshot](screenshot.png)
 
 ---
 
