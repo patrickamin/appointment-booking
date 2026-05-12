@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book an Appointment — {{ business_name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #1a7a4a, #25a862);
+      padding: 28px 32px;
+      color: #fff;
+    }
+
+    .card-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .card-header .arabic {
+      font-size: 16px;
+      opacity: 0.85;
+      direction: rtl;
+      margin-top: 4px;
+    }
+
+    .card-header .sub {
+      font-size: 13px;
+      opacity: 0.75;
+      margin-top: 6px;
+    }
+
+    .card-body { padding: 28px 32px; }
+
+    .field { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    label .ar {
+      font-weight: 400;
+      color: #999;
+      font-size: 12px;
+      margin-right: 4px;
+      direction: rtl;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #333;
+      background: #fafafa;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #1a7a4a;
+      background: #fff;
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1a7a4a, #25a862);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 6px;
+    }
+
+    .btn:hover { opacity: 0.92; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-text-ar {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.85;
+      margin-top: 2px;
+      direction: rtl;
+    }
+
+    /* Success state */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 40px 32px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #e8f5ee;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+    }
+
+    .success h2 { font-size: 20px; color: #1a7a4a; margin-bottom: 8px; }
+    .success .ar { font-size: 15px; color: #999; direction: rtl; margin-bottom: 16px; }
+    .success p { font-size: 14px; color: #666; line-height: 1.6; }
+
+    .error-msg {
+      display: none;
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #cc3333;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .card-header, .card-body { padding: 20px; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <h1>📅 {{ business_name }}</h1>
+    <div class="arabic">احجز موعدك بسهولة</div>
+    <div class="sub">Book your appointment · Fill in your details below</div>
+  </div>
+
+  <div class="card-body">
+    <!-- Form -->
+    <div id="form-section">
+      <div class="error-msg" id="error-msg"></div>
+
+      <div class="field">
+        <label><span class="ar">الاسم الكامل</span> Full Name <span style="color:#e05">*</span></label>
+        <input type="text" id="name" placeholder="e.g. Ahmed Mohamed" required>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label><span class="ar">رقم الهاتف</span> Phone <span style="color:#e05">*</span></label>
+          <input type="tel" id="phone" placeholder="+20 10x xxx xxxx" required>
+        </div>
+        <div class="field">
+          <label><span class="ar">البريد الإلكتروني</span> Email <span style="color:#e05">*</span></label>
+          <input type="email" id="email" placeholder="you@email.com" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span class="ar">نوع الخدمة</span> Service <span style="color:#e05">*</span></label>
+        <select id="service" required>
+          <option value="" disabled selected>Select a service / اختر الخدمة</option>
+          {% for s in services %}
+          <option value="{{ s.strip() }}">{{ s.strip() }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label><span class="ar">التاريخ</span> Date <span style="color:#e05">*</span></label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="field">
+          <label><span class="ar">الوقت</span> Time <span style="color:#e05">*</span></label>
+          <select id="time" required>
+            <option value="" disabled selected>Select a time / اختر الوقت</option>
+            {% for slot in time_slots %}
+            <option value="{{ slot }}">{{ slot }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span class="ar">ملاحظات إضافية</span> Notes (optional)</label>
+        <textarea id="notes" placeholder="Any additional information..."></textarea>
+      </div>
+
+      <button class="btn" id="submit-btn" onclick="submitBooking()">
+        Confirm Appointment
+        <span class="btn-text-ar">تأكيد الموعد</span>
+      </button>
+    </div>
+
+    <!-- Success -->
+    <div class="success" id="success-section">
+      <div class="success-icon">✅</div>
+      <h2>Appointment Confirmed!</h2>
+      <div class="ar">تم تأكيد موعدك بنجاح</div>
+      <p>A confirmation email has been sent to you.<br>
+      <span style="color:#999;font-size:13px">تم إرسال بريد تأكيد إلى بريدك الإلكتروني</span></p>
+      <br>
+      <p style="color:#aaa;font-size:13px">We look forward to seeing you!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set min date to today
+  document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+  async function submitBooking() {
+    const btn = document.getElementById('submit-btn');
+    const errorEl = document.getElementById('error-msg');
+
+    const fields = {
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      service: document.getElementById('service').value,
+      date: document.getElementById('date').value,
+      time: document.getElementById('time').value,
+      notes: document.getElementById('notes').value.trim(),
+    };
+
+    if (!fields.name || !fields.phone || !fields.email || !fields.service || !fields.date || !fields.time) {
+      errorEl.textContent = 'Please fill in all required fields. / يرجى ملء جميع الحقول المطلوبة.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    errorEl.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch('/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('form-section').style.display = 'none';
+        document.getElementById('success-section').style.display = 'block';
+      } else {
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = 'Confirm Appointment<span class="btn-text-ar">تأكيد الموعد</span>';
+      }
+    } catch {
+      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = 'Confirm Appointment<span class="btn-text-ar">تأكيد الموعد</span>';
+    }
+  }
+</script>
+
+</body>
+</html>
